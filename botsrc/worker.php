@@ -1,0 +1,226 @@
+<?php
+
+    /** @noinspection PhpUndefinedClassInspection */
+    /** @noinspection DuplicatedCode */
+
+    /**
+     * worker.php is the code that the worker will execute whenever a job passed on from the main
+     * bot. Starting the CLI will restart the workers that are already running in the background
+     */
+
+    use BackgroundWorker\BackgroundWorker;
+    use DeepAnalytics\DeepAnalytics;
+    use Longman\TelegramBot\Entities\ServerResponse;
+    use Longman\TelegramBot\Entities\Update;
+    use ppm\ppm;
+    use TelegramClientManager\TelegramClientManager;
+    use VerboseAdventure\Abstracts\EventType;
+    use VerboseAdventure\Classes\ErrorHandler;
+    use VerboseAdventure\VerboseAdventure;
+
+    // Import all required auto loaders
+    /** @noinspection PhpIncludeInspection */
+    require("ppm");
+
+    /** @noinspection PhpUnhandledExceptionInspection */
+    ppm::import("net.intellivoid.acm");
+    /** @noinspection PhpUnhandledExceptionInspection */
+    ppm::import("net.intellivoid.background_worker");
+    /** @noinspection PhpUnhandledExceptionInspection */
+    ppm::import("net.intellivoid.deepanalytics");
+    /** @noinspection PhpUnhandledExceptionInspection */
+    ppm::import("net.intellivoid.telegram_client_manager");
+    /** @noinspection PhpUnhandledExceptionInspection */
+    ppm::import("net.intellivoid.verbose_adventure");
+    /** @noinspection PhpUnhandledExceptionInspection */
+    ppm::import("net.intellivoid.tdlib");
+
+
+    $current_directory = getcwd();
+    VerboseAdventure::setStdout(true); // Enable stdout
+    ErrorHandler::registerHandlers(); // Register error handlers
+
+    if(class_exists("IntellivoidBot") == false)
+    {
+        if(file_exists($current_directory . DIRECTORY_SEPARATOR . 'IntellivoidBot.php'))
+        {
+            require_once($current_directory . DIRECTORY_SEPARATOR . 'IntellivoidBot.php');
+        }
+        elseif(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'IntellivoidBot.php'))
+        {
+            require_once(__DIR__ . DIRECTORY_SEPARATOR . 'IntellivoidBot.php');
+        }
+        else
+        {
+            throw new RuntimeException("Cannot locate bot class");
+        }
+    }
+
+    // Load all required configurations
+
+    /** @noinspection PhpUnhandledExceptionInspection */
+    $TelegramServiceConfiguration = IntellivoidBot::getTelegramConfiguration();
+
+    /** @noinspection PhpUnhandledExceptionInspection */
+    $DatabaseConfiguration = IntellivoidBot::getDatabaseConfiguration();
+
+    /** @noinspection PhpUnhandledExceptionInspection */
+    $BackgroundWorkerConfiguration = IntellivoidBot::getBackgroundWorkerConfiguration();
+
+    // Define and create the Telegram Bot instance (SQL)
+
+    define("TELEGRAM_BOT_NAME", $TelegramServiceConfiguration['BotName']);
+    IntellivoidBot::setLogHandler(new VerboseAdventure(TELEGRAM_BOT_NAME));
+    IntellivoidBot::setLastWorkerActivity((int)time());
+    IntellivoidBot::setIsSleeping(false);
+
+    if(strtolower($TelegramServiceConfiguration['BotName']) == 'true')
+    {
+        define("TELEGRAM_BOT_ENABLED", true);
+    }
+    else
+    {
+        define("TELEGRAM_BOT_ENABLED", false);
+    }
+
+    try
+    {
+        $telegram = new Longman\TelegramBot\Telegram(
+            $TelegramServiceConfiguration['BotToken'],
+            $TelegramServiceConfiguration['BotName']
+        );
+
+        if(file_exists($current_directory . DIRECTORY_SEPARATOR . 'SpamProtectionBot.php'))
+        {
+            $telegram->addCommandsPaths([$current_directory . DIRECTORY_SEPARATOR . 'commands']);
+        }
+        elseif(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'SpamProtectionBot.php'))
+        {
+            $telegram->addCommandsPaths([__DIR__ . DIRECTORY_SEPARATOR . 'commands']);
+        }
+        else
+        {
+            print("Cannot locate commands path");
+            exit(1);
+        }
+
+        \Longman\TelegramBot\TelegramLog::initialize();
+    }
+    catch (Longman\TelegramBot\Exception\TelegramException $e)
+    {
+        IntellivoidBot::getLogHandler()->logException($e, "Worker");
+        exit(255);
+    }
+
+    try
+    {
+        $telegram->enableMySql(array(
+            'host' => $DatabaseConfiguration['Host'],
+            'port' => $DatabaseConfiguration['Port'],
+            'user' => $DatabaseConfiguration['Username'],
+            'password' => $DatabaseConfiguration['Password'],
+            'database' => $DatabaseConfiguration['Database'],
+        ));
+    }
+    catch(Exception $e)
+    {
+        IntellivoidBot::getLogHandler()->logException($e, "Worker");
+        exit(255);
+    }
+
+    // Start the worker instance
+    IntellivoidBot::getLogHandler()->log(EventType::INFO, "Starting Worker", "Worker");
+    IntellivoidBot::$DeepAnalytics = new DeepAnalytics();
+
+    // Create the database connections
+    IntellivoidBot::$TelegramClientManager = new TelegramClientManager();
+    if(IntellivoidBot::$TelegramClientManager->getDatabase()->connect_error)
+    {
+        IntellivoidBot::getLogHandler()->log(EventType::ERROR, "Failed to initialize TelegramClientManager, " . IntellivoidBot::$TelegramClientManager->getDatabase()->connect_error, "Worker");
+        exit(255);
+    }
+
+    try
+    {
+        $BackgroundWorker = new BackgroundWorker();
+        $BackgroundWorker->getWorker()->addServer(
+            $BackgroundWorkerConfiguration["Host"],
+            (int)$BackgroundWorkerConfiguration["Port"]
+        );
+    }
+    catch(Exception $e)
+    {
+        IntellivoidBot::getLogHandler()->logException($e, "Worker");
+        exit(255);
+    }
+
+    // Define the function "process_batch" to process a batch of Updates from Telegram in the background
+    $BackgroundWorker->getWorker()->getGearmanWorker()->addFunction($telegram->getBotUsername() . "_updates", function(GearmanJob $job) use ($telegram)
+    {
+        try
+        {
+            IntellivoidBot::setLastWorkerActivity((int)time()); // Set the last activity timestamp
+            IntellivoidBot::processSleepCycle(); // Wake worker if it's sleeping
+
+            $ServerResponse = new ServerResponse(json_decode($job->workload(), true), TELEGRAM_BOT_NAME);
+            if(is_null($ServerResponse->getResult()) == false)
+            {
+                $UpdateCount = count($ServerResponse->getResult());
+
+                if($UpdateCount > 0)
+                {
+                    IntellivoidBot::getLogHandler()->log(EventType::INFO, "Processing $UpdateCount update(s)", "Worker");
+
+                    /** @var Update $result */
+                    foreach ($ServerResponse->getResult() as $result)
+                    {
+                        try
+                        {
+                            IntellivoidBot::getLogHandler()->log(EventType::INFO, "Processing update ID " . $result->getUpdateId(), "Worker");
+                            $telegram->processUpdate($result);
+                        }
+                        catch(Exception $e)
+                        {
+                            IntellivoidBot::getLogHandler()->logException($e, "Worker");
+                        }
+                    }
+                }
+            }
+
+        }
+        catch(Exception $e)
+        {
+            IntellivoidBot::getLogHandler()->logException($e, "Worker");
+        }
+
+    });
+
+    // Start working
+    IntellivoidBot::getLogHandler()->log(EventType::INFO, "Worker started successfully", "Worker");
+
+    // Set the timeout to 5 seconds
+    $BackgroundWorker->getWorker()->getGearmanWorker()->setTimeout(500);
+
+    while(true)
+    {
+        while(
+            @$BackgroundWorker->getWorker()->getGearmanWorker()->work() ||
+            $BackgroundWorker->getWorker()->getGearmanWorker()->returnCode() == GEARMAN_TIMEOUT
+        )
+        {
+
+            if ($BackgroundWorker->getWorker()->getGearmanWorker()->returnCode() == GEARMAN_TIMEOUT)
+            {
+                IntellivoidBot::processSleepCycle(); // Go to sleep if there's no activity
+                continue;
+            }
+
+            if ($BackgroundWorker->getWorker()->getGearmanWorker()->returnCode() != GEARMAN_SUCCESS)
+            {
+                IntellivoidBot::getLogHandler()->log(EventType::WARNING, "Gearman returned error code " . $BackgroundWorker->getWorker()->getGearmanWorker()->returnCode(), "Worker");
+                break;
+            }
+        }
+    }
+
+

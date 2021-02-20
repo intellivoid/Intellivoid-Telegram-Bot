@@ -1,0 +1,85 @@
+{
+    "package": {
+        "package_name": "net.intellivoid.intellivoid_bot",
+        "name": "Telegram SpamProtectionBot",
+        "version": "1.0.0.0",
+        "author": "Zi Xing Narrakas",
+        "organization": "Intellivoid",
+        "description": "The main IntellivoidBot for Intellivoid Accounts and Intellivoid related services.",
+        "url": "https://github.com/intellivoid/Intellivoid-Telegram-Bot",
+        "dependencies": [
+            {
+                "package": "net.intellivoid.acm",
+                "version": "latest",
+                "source": "default@github/intellivoid/acm",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.background_worker",
+                "version": "latest",
+                "source": "default@github/intellivoid/BackgroundWorker",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.deepanalytics",
+                "version": "latest",
+                "source": "default@github/intellivoid/DeepAnalytics",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.telegram_client_manager",
+                "version": "latest",
+                "source": "default@github/intellivoid/IVA-Telegram",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.verbose_adventure",
+                "version": "latest",
+                "source": "default@github/intellivoid/VerboseAdventure",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.tdlib",
+                "version": "latest",
+                "source": "default@github/intellivoid/tdlib",
+                "required": true
+            }
+        ],
+        "configuration": {
+            "autoload_method": "generated_spl",
+            "main": {
+                "execution_point": "cli.php",
+                "create_symlink": false,
+                "name": null
+            },
+            "post_installation": [],
+            "pre_installation": []
+        }
+    },
+    "components": [
+        {
+            "required": true,
+            "file": "IntellivoidBot.php"
+        },
+        {
+            "required": true,
+            "file": "cli.php"
+        },
+        {
+            "required": true,
+            "file": "worker.php"
+        },
+        {
+            "required": true,
+            "file": "commands/StartCommand.php"
+        },
+        {
+            "required": true,
+            "file": "commands/WhoisCommand.php"
+        }
+    ],
+    "files": [
+        "package.json",
+        ".htaccess"
+    ]
+}

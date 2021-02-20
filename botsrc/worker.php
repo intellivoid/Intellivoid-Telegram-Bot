@@ -33,6 +33,8 @@
     /** @noinspection PhpUnhandledExceptionInspection */
     ppm::import("net.intellivoid.verbose_adventure");
     /** @noinspection PhpUnhandledExceptionInspection */
+    ppm::import("net.intellivoid.accounts");
+    /** @noinspection PhpUnhandledExceptionInspection */
     ppm::import("net.intellivoid.tdlib");
 
 
@@ -90,11 +92,11 @@
             $TelegramServiceConfiguration['BotName']
         );
 
-        if(file_exists($current_directory . DIRECTORY_SEPARATOR . 'SpamProtectionBot.php'))
+        if(file_exists($current_directory . DIRECTORY_SEPARATOR . 'IntellivoidBot.php'))
         {
             $telegram->addCommandsPaths([$current_directory . DIRECTORY_SEPARATOR . 'commands']);
         }
-        elseif(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'SpamProtectionBot.php'))
+        elseif(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'IntellivoidBot.php'))
         {
             $telegram->addCommandsPaths([__DIR__ . DIRECTORY_SEPARATOR . 'commands']);
         }

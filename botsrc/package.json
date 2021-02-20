@@ -15,6 +15,12 @@
                 "required": true
             },
             {
+                "package": "net.intellivoid.accounts",
+                "version": "latest",
+                "source": "default@github/intellivoid/intellivoid-accounts",
+                "required": true
+            },
+            {
                 "package": "net.intellivoid.background_worker",
                 "version": "latest",
                 "source": "default@github/intellivoid/BackgroundWorker",

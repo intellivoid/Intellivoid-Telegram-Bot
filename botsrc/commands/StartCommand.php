@@ -10,8 +10,10 @@
     use Longman\TelegramBot\Commands\UserCommands\BlacklistCommand;
     use Longman\TelegramBot\Commands\UserCommands\LanguageCommand;
     use Longman\TelegramBot\Commands\UserCommands\WhoisCommand;
+    use Longman\TelegramBot\Entities\InlineKeyboard;
     use Longman\TelegramBot\Entities\ServerResponse;
     use IntellivoidBot;
+    use Longman\TelegramBot\Request;
 
     /**
      * Start command

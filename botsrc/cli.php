@@ -33,6 +33,8 @@
     /** @noinspection PhpUnhandledExceptionInspection */
     ppm::import("net.intellivoid.verbose_adventure");
     /** @noinspection PhpUnhandledExceptionInspection */
+    ppm::import("net.intellivoid.accounts");
+    /** @noinspection PhpUnhandledExceptionInspection */
     ppm::import("net.intellivoid.tdlib");
 
     VerboseAdventure::setStdout(true); // Enable stdout

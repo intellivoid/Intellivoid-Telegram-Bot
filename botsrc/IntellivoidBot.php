@@ -56,7 +56,7 @@ use VerboseAdventure\VerboseAdventure;
          */
         public static function autoConfig(): acm
         {
-            $acm = new acm(__DIR__, 'SpamProtectionBot');
+            $acm = new acm(__DIR__, 'IntellivoidBot');
 
             $TelegramSchema = new Schema();
             $TelegramSchema->setDefinition('BotName', '<BOT NAME HERE>');

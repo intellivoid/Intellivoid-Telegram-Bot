@@ -69,7 +69,7 @@
     $BackgroundWorkerConfiguration = IntellivoidBot::getBackgroundWorkerConfiguration();
 
     // Create the Telegram Bot instance (NO SQL)
-    define("MAIN_OPERATOR_USERNAME", "IntellivoidSupport");
+    define("TELEGRAM_BOT_NAME", $TelegramServiceConfiguration['BotName']);
     IntellivoidBot::setLogHandler(new VerboseAdventure(TELEGRAM_BOT_NAME));
 
     if(strtolower($TelegramServiceConfiguration['BotName']) == 'true')

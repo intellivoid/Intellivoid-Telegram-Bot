@@ -81,7 +81,15 @@
         },
         {
             "required": true,
+            "file": "commands/UnlinkCommand.php"
+        },
+        {
+            "required": true,
             "file": "commands/WhoisCommand.php"
+        },
+        {
+            "required": true,
+            "file": "commands/CallbackqueryCommand.php"
         }
     ],
     "files": [

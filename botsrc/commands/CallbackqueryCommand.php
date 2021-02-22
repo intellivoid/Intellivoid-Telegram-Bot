@@ -28,6 +28,10 @@
     use TelegramClientManager\Exceptions\InvalidSearchMethod;
     use TelegramClientManager\Exceptions\TelegramClientNotFoundException;
 
+    /**
+     * Class CallbackqueryCommand
+     * @package Longman\TelegramBot\Commands\SystemCommands
+     */
     class CallbackqueryCommand extends SystemCommand
     {
         /**
@@ -38,12 +42,12 @@
         /**
          * @var string
          */
-        protected $description = 'Reply to callback query';
+        protected $description = "Reply to callback query";
 
         /**
          * @var string
          */
-        protected $version = '"1.0.0';
+        protected $version = "1.0.0";
 
         /**
          * The whois command used for finding targets
@@ -55,16 +59,16 @@
         /**
          * Command execute method
          *
-         * @return ServerResponse
+         * @return ServerResponse|null
          * @throws AccountNotFoundException
          * @throws DatabaseException
+         * @throws InvalidSearchMethod
          * @throws InvalidSearchMethodException
+         * @throws TelegramClientNotFoundException
          * @throws TelegramException
          * @throws \TelegramClientManager\Exceptions\DatabaseException
-         * @throws InvalidSearchMethod
-         * @throws TelegramClientNotFoundException
          */
-        public function execute()
+        public function execute(): ?ServerResponse
         {
             $IntellivoidAccounts = new IntellivoidAccounts();
 
@@ -77,19 +81,19 @@
 
 
             Request::editMessageReplyMarkup([
-                'chat_id' => $Client->Chat->ID,
-                'message_id' => $this->getCallbackQuery()->getMessage()->getMessageId(),
-                'reply_markup' => new InlineKeyboard([])
+                "chat_id" => $Client->Chat->ID,
+                "message_id" => $this->getCallbackQuery()->getMessage()->getMessageId(),
+                "reply_markup" => new InlineKeyboard([])
             ]);
 
 
             if($Client->AccountID == 0)
             {
                 return Request::answerCallbackQuery([
-                    'callback_query_id' => $this->getCallbackQuery()->getId(),
-                    'text'              => 'Telegram Account not linked',
-                    'show_alert'        => $this->getCallbackQuery()->getData(),
-                    'cache_time'        => 10,
+                    "callback_query_id" => $this->getCallbackQuery()->getId(),
+                    "text" => "Telegram Account not linked",
+                    "show_alert" => $this->getCallbackQuery()->getData(),
+                    "cache_time" => 10,
                 ]);
             }
 
@@ -115,8 +119,8 @@
                     IntellivoidBot::getTelegramClientManager()->getTelegramClientManager()->updateClient($Client);
 
                     return Request::sendMessage([
-                        'chat_id' => $Client->Chat->ID,
-                        'text' => "\u{2705} You have successfully unlinked this Telegram Account from Intellivoid Accounts"
+                        "chat_id" => $Client->Chat->ID,
+                        "text" => "\u{2705} You have successfully unlinked this Telegram Account from Intellivoid Accounts"
                     ]);
 
                 case "auth_allow":
@@ -125,65 +129,65 @@
                         $IntellivoidAccounts->getTelegramService()->approveAuth($Client);
 
                         Request::answerCallbackQuery([
-                            'callback_query_id' => $this->getCallbackQuery()->getId(),
-                            'text'              => 'Approved',
-                            'show_alert'        => $this->getCallbackQuery()->getData(),
-                            'cache_time'        => 10,
+                            "callback_query_id" => $this->getCallbackQuery()->getId(),
+                            "text" => "Approved",
+                            "show_alert" => $this->getCallbackQuery()->getData(),
+                            "cache_time" => 10,
                         ]);
 
                         return Request::sendMessage([
-                            'chat_id' => $Client->Chat->ID,
-                            'text' => "\u{2705} You have approved for this authentication request"
+                            "chat_id" => $Client->Chat->ID,
+                            "text" => "\u{2705} You have approved for this authentication request"
                         ]);
                     }
                     catch (AuthNotPromptedException $e)
                     {
                         return Request::answerCallbackQuery([
-                            'callback_query_id' => $this->getCallbackQuery()->getId(),
-                            'text'              => 'No authentication request has been issued',
-                            'show_alert'        => $this->getCallbackQuery()->getData(),
-                            'cache_time'        => 10,
+                            "callback_query_id" => $this->getCallbackQuery()->getId(),
+                            "text" => "No authentication request has been issued",
+                            "show_alert" => $this->getCallbackQuery()->getData(),
+                            "cache_time" => 10,
                         ]);
                     }
                     catch (AuthPromptAlreadyApprovedException $e)
                     {
                         return Request::answerCallbackQuery([
-                            'callback_query_id' => $this->getCallbackQuery()->getId(),
-                            'text'              => 'This authentication request has already been approved',
-                            'show_alert'        => $this->getCallbackQuery()->getData(),
-                            'cache_time'        => 10,
+                            "callback_query_id" => $this->getCallbackQuery()->getId(),
+                            "text" => "This authentication request has already been approved",
+                            "show_alert" => $this->getCallbackQuery()->getData(),
+                            "cache_time" => 10,
                         ]);
                     }
                     catch (AuthPromptExpiredException $e)
                     {
                         return Request::answerCallbackQuery([
-                            'callback_query_id' => $this->getCallbackQuery()->getId(),
-                            'text'              => 'This authentication request has expired',
-                            'show_alert'        => $this->getCallbackQuery()->getData(),
-                            'cache_time'        => 10,
+                            "callback_query_id" => $this->getCallbackQuery()->getId(),
+                            "text" => "This authentication request has expired",
+                            "show_alert" => $this->getCallbackQuery()->getData(),
+                            "cache_time" => 10,
                         ]);
                     }
                     catch (TelegramServicesNotAvailableException $e)
                     {
                         Request::answerCallbackQuery([
-                            'callback_query_id' => $this->getCallbackQuery()->getId(),
-                            'text'              => 'The service is unavailable',
-                            'show_alert'        => $this->getCallbackQuery()->getData(),
-                            'cache_time'        => 10,
+                            "callback_query_id" => $this->getCallbackQuery()->getId(),
+                            "text" => "The service is unavailable",
+                            "show_alert" => $this->getCallbackQuery()->getData(),
+                            "cache_time" => 10,
                         ]);
 
                         return Request::sendMessage([
-                            'chat_id' => $Client->Chat->ID,
-                            'text' => "This service is not available at the moment"
+                            "chat_id" => $Client->Chat->ID,
+                            "text" => "This service is not available at the moment"
                         ]);
                     }
                     catch(Exception $exception)
                     {
                         return Request::answerCallbackQuery([
-                            'callback_query_id' => $this->getCallbackQuery()->getId(),
-                            'text'              => 'Intellivoid Server Error (' . $exception->getCode() . ')',
-                            'show_alert'        => $this->getCallbackQuery()->getData(),
-                            'cache_time'        => 10,
+                            "callback_query_id" => $this->getCallbackQuery()->getId(),
+                            "text" => "Intellivoid Server Error (" . $exception->getCode() . ")",
+                            "show_alert" => $this->getCallbackQuery()->getData(),
+                            "cache_time" => 10,
                         ]);
                     }
 
@@ -193,72 +197,72 @@
                         $IntellivoidAccounts->getTelegramService()->disallowAuth($Client);
 
                         Request::answerCallbackQuery([
-                            'callback_query_id' => $this->getCallbackQuery()->getId(),
-                            'text'              => 'Denied',
-                            'show_alert'        => $this->getCallbackQuery()->getData(),
-                            'cache_time'        => 10,
+                            "callback_query_id" => $this->getCallbackQuery()->getId(),
+                            "text" => "Denied",
+                            "show_alert" => $this->getCallbackQuery()->getData(),
+                            "cache_time" => 10,
                         ]);
 
                         return Request::sendMessage([
-                            'chat_id' => $Client->Chat->ID,
-                            'text' => "\u{1F6AB} You have denied this authentication request"
+                            "chat_id" => $Client->Chat->ID,
+                            "text" => "\u{1F6AB} You have denied this authentication request"
                         ]);
                     }
                     catch (AuthNotPromptedException $e)
                     {
                         return Request::answerCallbackQuery([
-                            'callback_query_id' => $this->getCallbackQuery()->getId(),
-                            'text'              => 'No authentication request has been issued',
-                            'show_alert'        => $this->getCallbackQuery()->getData(),
-                            'cache_time'        => 10,
+                            "callback_query_id" => $this->getCallbackQuery()->getId(),
+                            "text" => "No authentication request has been issued",
+                            "show_alert" => $this->getCallbackQuery()->getData(),
+                            "cache_time" => 10,
                         ]);
                     }
                     catch (AuthPromptAlreadyApprovedException $e)
                     {
                         return Request::answerCallbackQuery([
-                            'callback_query_id' => $this->getCallbackQuery()->getId(),
-                            'text'              => 'This authentication request has already been approved',
-                            'show_alert'        => $this->getCallbackQuery()->getData(),
-                            'cache_time'        => 10,
+                            "callback_query_id" => $this->getCallbackQuery()->getId(),
+                            "text" => "This authentication request has already been approved",
+                            "show_alert" => $this->getCallbackQuery()->getData(),
+                            "cache_time" => 10,
                         ]);
                     }
                     catch (AuthPromptExpiredException $e)
                     {
                         return Request::answerCallbackQuery([
-                            'callback_query_id' => $this->getCallbackQuery()->getId(),
-                            'text'              => 'This authentication request has expired',
-                            'show_alert'        => $this->getCallbackQuery()->getData(),
-                            'cache_time'        => 10,
+                            "callback_query_id" => $this->getCallbackQuery()->getId(),
+                            "text" => "This authentication request has expired",
+                            "show_alert" => $this->getCallbackQuery()->getData(),
+                            "cache_time" => 10,
                         ]);
                     }
                     catch (TelegramServicesNotAvailableException $e)
                     {
                         Request::answerCallbackQuery([
-                            'callback_query_id' => $this->getCallbackQuery()->getId(),
-                            'text'              => 'The service is unavailable',
-                            'show_alert'        => $this->getCallbackQuery()->getData(),
-                            'cache_time'        => 10,
+                            "callback_query_id" => $this->getCallbackQuery()->getId(),
+                            "text" => "The service is unavailable",
+                            "show_alert" => $this->getCallbackQuery()->getData(),
+                            "cache_time" => 10,
                         ]);
 
                         return Request::sendMessage([
-                            'chat_id' => $Client->Chat->ID,
-                            'text' => "This service is not available at the moment"
+                            "chat_id" => $Client->Chat->ID,
+                            "text" => "This service is not available at the moment"
                         ]);
                     }
                     catch(Exception $exception)
                     {
                         return Request::answerCallbackQuery([
-                            'callback_query_id' => $this->getCallbackQuery()->getId(),
-                            'text'              => 'Intellivoid Server Error (' . $exception->getCode() . ')',
-                            'show_alert'        => $this->getCallbackQuery()->getData(),
-                            'cache_time'        => 10,
+                            "callback_query_id" => $this->getCallbackQuery()->getId(),
+                            "text" => "Intellivoid Server Error (" . $exception->getCode() . ")",
+                            "show_alert" => $this->getCallbackQuery()->getData(),
+                            "cache_time" => 10,
                         ]);
                     }
             }
 
             return Request::sendMessage([
-                'chat_id' => $Client->Chat->ID,
-                'text' => "Invalid callback query"
+                "chat_id" => $Client->Chat->ID,
+                "text" => "Invalid callback query"
             ]);
 
         }

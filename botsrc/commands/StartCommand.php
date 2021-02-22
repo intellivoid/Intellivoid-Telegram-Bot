@@ -16,6 +16,7 @@
     use Longman\TelegramBot\Commands\UserCommands\LanguageCommand;
     use Longman\TelegramBot\Commands\UserCommands\WhoisCommand;
     use Longman\TelegramBot\Entities\InlineKeyboard;
+    use Longman\TelegramBot\Entities\LoginUrl;
     use Longman\TelegramBot\Entities\ServerResponse;
     use IntellivoidBot;
     use Longman\TelegramBot\Exception\TelegramException;
@@ -107,7 +108,11 @@
                     "reply_markup" => new InlineKeyboard([
                         [
                             "text" => "Link your Intellivoid Account",
-                            "url" => "https://accounts.intellivoid.net/auth/telegram?auth=telegram&client_id=" . $this->WhoisCommand->UserClient->PublicID
+                            "login_url" => new LoginUrl([
+                                "url" => "https://accounts.intellivoid.net/auth/telegram?auth=telegram&client_id=" . $this->WhoisCommand->UserClient->PublicID,
+                                "bot_username" => TELEGRAM_BOT_NAME,
+                                "request_write_access" => True
+                            ])
                         ]
                     ]),
                 ]);

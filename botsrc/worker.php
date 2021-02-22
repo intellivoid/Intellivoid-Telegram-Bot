@@ -10,9 +10,11 @@
 
     use BackgroundWorker\BackgroundWorker;
     use DeepAnalytics\DeepAnalytics;
-    use Longman\TelegramBot\Entities\ServerResponse;
+use IntellivoidAccounts\IntellivoidAccounts;
+use Longman\TelegramBot\Entities\ServerResponse;
     use Longman\TelegramBot\Entities\Update;
-    use ppm\ppm;
+use Longman\TelegramBot\TelegramLog;
+use ppm\ppm;
     use TelegramClientManager\TelegramClientManager;
     use VerboseAdventure\Abstracts\EventType;
     use VerboseAdventure\Classes\ErrorHandler;
@@ -106,7 +108,7 @@
             exit(1);
         }
 
-        \Longman\TelegramBot\TelegramLog::initialize();
+        TelegramLog::initialize();
     }
     catch (Longman\TelegramBot\Exception\TelegramException $e)
     {
@@ -139,6 +141,13 @@
     if(IntellivoidBot::$TelegramClientManager->getDatabase()->connect_error)
     {
         IntellivoidBot::getLogHandler()->log(EventType::ERROR, "Failed to initialize TelegramClientManager, " . IntellivoidBot::$TelegramClientManager->getDatabase()->connect_error, "Worker");
+        exit(255);
+    }
+
+    IntellivoidBot::$IntellivoidAccounts = new IntellivoidAccounts();
+    if(IntellivoidBot::$IntellivoidAccounts->getDatabase()->connect_error)
+    {
+        IntellivoidBot::getLogHandler()->log(EventType::ERROR, "Failed to initialize IntellivoidAccounts, " . IntellivoidBot::$IntellivoidAccounts->getDatabase()->connect_error, "Worker");
         exit(255);
     }
 

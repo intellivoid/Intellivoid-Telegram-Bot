@@ -5,7 +5,8 @@
     use BackgroundWorker\BackgroundWorker;
     use CoffeeHouse\CoffeeHouse;
     use DeepAnalytics\DeepAnalytics;
-    use SpamProtection\SpamProtection;
+use IntellivoidAccounts\IntellivoidAccounts;
+use SpamProtection\SpamProtection;
     use TelegramClientManager\TelegramClientManager;
 use VerboseAdventure\Abstracts\EventType;
 use VerboseAdventure\VerboseAdventure;
@@ -33,6 +34,11 @@ use VerboseAdventure\VerboseAdventure;
          * @var TelegramClientManager
          */
         public static $TelegramClientManager;
+
+        /**
+         * @var IntellivoidAccounts
+         */
+        public static $IntellivoidAccounts;
 
         /**
          * @var DeepAnalytics
@@ -201,6 +207,7 @@ use VerboseAdventure\VerboseAdventure;
                     self::getLogHandler()->log(EventType::INFO, "Worker hasn't been active the last 60 seconds, going to sleep.", "Worker");
 
                     self::getTelegramClientManager()->disconnectDatabase();
+                    self::getIntellivoidAccounts()->disconnectDatabase();
                     self::setIsSleeping(true);
                 }
             }
@@ -211,8 +218,17 @@ use VerboseAdventure\VerboseAdventure;
                     self::getLogHandler()->log(EventType::INFO, "Worker is active, awaking from sleep mode", "Worker");
 
                     self::getTelegramClientManager()->connectDatabase();
+                    self::getIntellivoidAccounts()->connectDatabase();
                     self::setIsSleeping(false);
                 }
             }
+        }
+
+        /**
+         * @return IntellivoidAccounts
+         */
+        public static function getIntellivoidAccounts(): IntellivoidAccounts
+        {
+            return self::$IntellivoidAccounts;
         }
     }

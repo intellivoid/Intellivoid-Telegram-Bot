@@ -33,15 +33,17 @@
         /**
          * @var string
          */
-        protected $name = 'callbackquery';
+        protected $name = "callbackquery";
+
         /**
          * @var string
          */
         protected $description = 'Reply to callback query';
+
         /**
          * @var string
          */
-        protected $version = '1.0.0';
+        protected $version = '"1.0.0';
 
         /**
          * The whois command used for finding targets

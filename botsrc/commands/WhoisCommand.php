@@ -374,12 +374,6 @@
             try
             {
                 $this->ChatClient = $TelegramClientManager->getTelegramClientManager()->registerChat($this->ChatObject);
-                if(isset($this->ChatClient->SessionData->Data["chat_settings"]) == false)
-                {
-                    $ChatSettings = SettingsManager::getChatSettings($this->ChatClient);
-                    $this->ChatClient = SettingsManager::updateChatSettings($this->ChatClient, $ChatSettings);
-                    $TelegramClientManager->getTelegramClientManager()->updateClient($this->ChatClient);
-                }
             }
             catch(Exception $e)
             {
@@ -391,12 +385,6 @@
             try
             {
                 $this->UserClient = $TelegramClientManager->getTelegramClientManager()->registerUser($this->UserObject);
-                if(isset($this->UserClient->SessionData->Data["user_status"]) == false)
-                {
-                    $UserStatus = SettingsManager::getUserStatus($this->UserClient);
-                    $this->UserClient = SettingsManager::updateUserStatus($this->UserClient, $UserStatus);
-                    $TelegramClientManager->getTelegramClientManager()->updateClient($this->UserClient);
-                }
             }
             catch(Exception $e)
             {
@@ -411,12 +399,6 @@
                 {
                     $this->ForwardUserObject = TelegramClient\User::fromArray($this->getMessage()->getForwardFrom()->getRawData());
                     $this->ForwardUserClient = $TelegramClientManager->getTelegramClientManager()->registerUser($this->ForwardUserObject);
-                    if(isset($this->ForwardUserClient->SessionData->Data["user_status"]) == false)
-                    {
-                        $ForwardUserStatus = SettingsManager::getUserStatus($this->ForwardUserClient);
-                        $this->ForwardUserClient = SettingsManager::updateUserStatus($this->ForwardUserClient, $ForwardUserStatus);
-                        $TelegramClientManager->getTelegramClientManager()->updateClient($this->ForwardUserClient);
-                    }
                 }
             }
             catch(Exception $e)
@@ -441,12 +423,6 @@
                 {
                     $this->ForwardChannelObject = TelegramClient\Chat::fromArray($this->getMessage()->getForwardFromChat()->getRawData());
                     $this->ForwardChannelClient = $TelegramClientManager->getTelegramClientManager()->registerChat($this->ForwardChannelObject);
-                    if(isset($this->ForwardChannelClient->SessionData->Data["channel_status"]) == false)
-                    {
-                        $ForwardChannelStatus = SettingsManager::getChannelStatus($this->ForwardChannelClient);
-                        $this->ForwardChannelClient = SettingsManager::updateChannelStatus($this->ForwardChannelClient, $ForwardChannelStatus);
-                        $TelegramClientManager->getTelegramClientManager()->updateClient($this->ForwardChannelClient);
-                    }
                 }
             }
             catch(Exception $e)
@@ -472,13 +448,6 @@
                     {
                         $this->ReplyToUserObject = TelegramClient\User::fromArray($this->getMessage()->getReplyToMessage()->getFrom()->getRawData());
                         $this->ReplyToUserClient = $TelegramClientManager->getTelegramClientManager()->registerUser($this->ReplyToUserObject);
-
-                        if(isset($this->ReplyToUserClient->SessionData->Data["user_status"]) == false)
-                        {
-                            $ForwardUserStatus = SettingsManager::getUserStatus($this->ReplyToUserClient);
-                            $this->ReplyToUserClient = SettingsManager::updateUserStatus($this->ReplyToUserClient, $ForwardUserStatus);
-                            $TelegramClientManager->getTelegramClientManager()->updateClient($this->ReplyToUserClient);
-                        }
                     }
                 }
             }
@@ -505,13 +474,6 @@
                     {
                         $this->ReplyToUserForwardChannelObject = TelegramClient\User::fromArray($this->getMessage()->getReplyToMessage()->getForwardFrom()->getRawData());
                         $this->ReplyToUserForwardChannelClient = $TelegramClientManager->getTelegramClientManager()->registerUser($this->ReplyToUserForwardChannelObject);
-
-                        if(isset($this->ReplyToUserForwardChannelClient->SessionData->Data["channel_status"]) == false)
-                        {
-                            $ForwardChannelStatus = SettingsManager::getChannelStatus($this->ReplyToUserForwardChannelClient);
-                            $this->ReplyToUserForwardChannelClient = SettingsManager::updateChannelStatus($this->ReplyToUserForwardChannelClient, $ForwardChannelStatus);
-                            $TelegramClientManager->getTelegramClientManager()->updateClient($this->ReplyToUserForwardChannelClient);
-                        }
                     }
                 }
             }
@@ -538,13 +500,6 @@
                     {
                         $this->ReplyToUserForwardChannelObject = TelegramClient\Chat::fromArray($this->getMessage()->getReplyToMessage()->getForwardFromChat()->getRawData());
                         $this->ReplyToUserForwardChannelClient = $TelegramClientManager->getTelegramClientManager()->registerChat($this->ReplyToUserForwardChannelObject);
-
-                        if(isset($this->ReplyToUserForwardChannelClient->SessionData->Data["user_status"]) == false)
-                        {
-                            $ForwardUserStatus = SettingsManager::getUserStatus($this->ReplyToUserForwardChannelClient);
-                            $this->ReplyToUserForwardChannelClient = SettingsManager::updateUserStatus($this->ReplyToUserForwardChannelClient, $ForwardUserStatus);
-                            $TelegramClientManager->getTelegramClientManager()->updateClient($this->ReplyToUserForwardChannelClient);
-                        }
                     }
                 }
             }
@@ -579,13 +534,6 @@
                             $MentionUserObject = TelegramClient\User::fromArray($messageEntity->getUser()->getRawData());
                             /** @noinspection DuplicatedCode */
                             $MentionUserClient = $TelegramClientManager->getTelegramClientManager()->registerUser($MentionUserObject);
-                            if(isset($MentionUserClient->SessionData->Data["user_status"]) == false)
-                            {
-                                $UserStatus = SettingsManager::getUserStatus($MentionUserClient);
-                                $MentionUserClient = SettingsManager::updateUserStatus($MentionUserClient, $UserStatus);
-                                $TelegramClientManager->getTelegramClientManager()->updateClient($MentionUserClient);
-                            }
-
                             $this->MentionUserObjects[$MentionUserObject->ID] = $MentionUserObject;
                             $this->MentionUserClients[$MentionUserObject->ID] = $MentionUserClient;
                         }
@@ -607,13 +555,6 @@
                                 {
                                     /** @noinspection DuplicatedCode */
                                     $MentionUserClient = $TelegramClientManager->getTelegramClientManager()->registerUser($MentionUserObject);
-                                    if(isset($MentionUserClient->SessionData->Data["user_status"]) == false)
-                                    {
-                                        $UserStatus = SettingsManager::getUserStatus($MentionUserClient);
-                                        $MentionUserClient = SettingsManager::updateUserStatus($MentionUserClient, $UserStatus);
-                                        $TelegramClientManager->getTelegramClientManager()->updateClient($MentionUserClient);
-                                    }
-
                                     $this->MentionUserObjects[$MentionUserObject->ID] = $MentionUserObject;
                                     $this->MentionUserClients[$MentionUserObject->ID] = $MentionUserClient;
                                 }
@@ -653,13 +594,6 @@
                             $NewUserObject = TelegramClient\User::fromArray($chatMember->getUser()->getRawData());
                             /** @noinspection DuplicatedCode */
                             $NewUserClient = $TelegramClientManager->getTelegramClientManager()->registerUser($NewUserObject);
-                            if(isset($NewUserClient->SessionData->Data["user_status"]) == false)
-                            {
-                                $UserStatus = SettingsManager::getUserStatus($NewUserClient);
-                                $NewUserClient = SettingsManager::updateUserStatus($NewUserClient, $UserStatus);
-                                $TelegramClientManager->getTelegramClientManager()->updateClient($NewUserClient);
-                            }
-
                             $this->NewChatMembersObjects[$NewUserObject->ID] = $NewUserObject;
                             $this->NewChatMembersClients[$NewUserObject->ID] = $NewUserClient;
                         }

@@ -76,7 +76,25 @@
         {
             // Find all clients
             $this->WhoisCommand = new WhoisCommand($this->telegram, $this->update);
-            $this->WhoisCommand->findClients();
+
+            try
+            {
+                $this->WhoisCommand->findClients();
+            }
+            catch(Exception $e)
+            {
+                $ReferenceID = IntellivoidBot::getLogHandler()->logException($e, "Worker");
+                /** @noinspection PhpUnhandledExceptionInspection */
+                return Request::sendMessage([
+                    "chat_id" => $this->getMessage()->getChat()->getId(),
+                    "reply_to_message_id" => $this->getMessage()->getMessageId(),
+                    "parse_mode" => "html",
+                    "text" =>
+                        "Oops! Something went wrong! contact someone in @IntellivoidDiscussions\n\n" .
+                        "Error Code: <code>" . $ReferenceID . "</code>\n" .
+                        "Object: <code>Events/start_command.bin</code>"
+                ]);
+            }
 
             // Tally DeepAnalytics
             $DeepAnalytics = IntellivoidBot::getDeepAnalytics();

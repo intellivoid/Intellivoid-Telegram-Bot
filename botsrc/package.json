@@ -2,7 +2,7 @@
     "package": {
         "package_name": "net.intellivoid.intellivoid_bot",
         "name": "Intellivoid Bot",
-        "version": "1.0.0.1",
+        "version": "1.0.0.2",
         "author": "Zi Xing Narrakas",
         "organization": "Intellivoid",
         "description": "The main IntellivoidBot for Intellivoid Accounts and Intellivoid related services.",

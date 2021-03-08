@@ -119,9 +119,28 @@
         exit(255);
     }
 
+    $NextRestart = (int)time() + 1500;
+
     // Start listening to updates
     while(true)
     {
+        try
+        {
+            if((int)time() >= $NextRestart)
+            {
+                $NextRestart = (int)time() + 1500;
+
+                IntellivoidBot::getBackgroundWorker()->getSupervisor()->restartWorkers(
+                    $current_directory . DIRECTORY_SEPARATOR . 'worker.php', TELEGRAM_BOT_NAME,
+                    (int)$BackgroundWorkerConfiguration['MaxWorkers']
+                );
+            }
+        }
+        catch(Exception $e)
+        {
+            unset($e);
+        }
+
         try
         {
             //SpamProtectionBot::getLogHandler()->log(EventType::INFO, "Listen for updates", "Main");

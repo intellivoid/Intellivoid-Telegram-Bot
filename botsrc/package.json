@@ -54,7 +54,7 @@
         "configuration": {
             "autoload_method": "generated_spl",
             "main": {
-                "execution_point": "cli",
+                "execution_point": "main",
                 "create_symlink": false,
                 "name": null
             },

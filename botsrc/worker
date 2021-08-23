@@ -10,11 +10,11 @@
 
     use BackgroundWorker\BackgroundWorker;
     use DeepAnalytics\DeepAnalytics;
-use IntellivoidAccounts\IntellivoidAccounts;
-use Longman\TelegramBot\Entities\ServerResponse;
+    use IntellivoidAccounts\IntellivoidAccounts;
+    use Longman\TelegramBot\Entities\ServerResponse;
     use Longman\TelegramBot\Entities\Update;
-use Longman\TelegramBot\TelegramLog;
-use ppm\ppm;
+    use Longman\TelegramBot\TelegramLog;
+    use ppm\ppm;
     use TelegramClientManager\TelegramClientManager;
     use VerboseAdventure\Abstracts\EventType;
     use VerboseAdventure\Classes\ErrorHandler;
@@ -25,20 +25,7 @@ use ppm\ppm;
     require("ppm");
 
     /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.acm");
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.background_worker");
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.deepanalytics");
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.telegram_client_manager");
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.verbose_adventure");
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.accounts");
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.tdlib");
-
+    ppm::import("net.intellivoid.intellivoid_bot");
 
     $current_directory = getcwd();
     VerboseAdventure::setStdout(true); // Enable stdout

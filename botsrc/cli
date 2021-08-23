@@ -23,19 +23,7 @@
     require("ppm");
 
     /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.acm");
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.background_worker");
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.deepanalytics");
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.telegram_client_manager");
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.verbose_adventure");
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.accounts");
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.tdlib");
+    ppm::import("net.intellivoid.intellivoid_bot");
 
     VerboseAdventure::setStdout(true); // Enable stdout
     ErrorHandler::registerHandlers(); // Register error handlers

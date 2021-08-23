@@ -109,7 +109,7 @@
             (int)$BackgroundWorkerConfiguration["Port"]
         );
         IntellivoidBot::getBackgroundWorker()->getSupervisor()->restartWorkers(
-            $current_directory . DIRECTORY_SEPARATOR . 'worker.php', TELEGRAM_BOT_NAME,
+            $current_directory . DIRECTORY_SEPARATOR . 'worker', TELEGRAM_BOT_NAME,
             (int)$BackgroundWorkerConfiguration['MaxWorkers']
         );
     }
@@ -131,7 +131,7 @@
                 $NextRestart = (int)time() + 1500;
 
                 IntellivoidBot::getBackgroundWorker()->getSupervisor()->restartWorkers(
-                    $current_directory . DIRECTORY_SEPARATOR . 'worker.php', TELEGRAM_BOT_NAME,
+                    $current_directory . DIRECTORY_SEPARATOR . 'worker', TELEGRAM_BOT_NAME,
                     (int)$BackgroundWorkerConfiguration['MaxWorkers']
                 );
             }

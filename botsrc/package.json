@@ -54,7 +54,7 @@
         "configuration": {
             "autoload_method": "generated_spl",
             "main": {
-                "execution_point": "cli.php",
+                "execution_point": "cli",
                 "create_symlink": false,
                 "name": null
             },
@@ -66,14 +66,6 @@
         {
             "required": true,
             "file": "IntellivoidBot.php"
-        },
-        {
-            "required": true,
-            "file": "cli.php"
-        },
-        {
-            "required": true,
-            "file": "worker.php"
         },
         {
             "required": true,
@@ -94,6 +86,8 @@
     ],
     "files": [
         "package.json",
+        "cli",
+        "worker",
         ".htaccess"
     ]
 }

@@ -87,7 +87,6 @@
     "files": [
         "package.json",
         "worker",
-        ".htaccess",
         "main"
     ]
 }

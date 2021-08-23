@@ -86,8 +86,8 @@
     ],
     "files": [
         "package.json",
-        "cli",
         "worker",
-        ".htaccess"
+        ".htaccess",
+        "main"
     ]
 }

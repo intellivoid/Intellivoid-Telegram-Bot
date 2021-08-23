@@ -92,11 +92,9 @@
     try
     {
         IntellivoidBot::$BackgroundWorker = new BackgroundWorker();
-        IntellivoidBot::getBackgroundWorker()->getClient()->addServer(
-            $BackgroundWorkerConfiguration["Host"],
-            (int)$BackgroundWorkerConfiguration["Port"]
-        );
-        IntellivoidBot::getBackgroundWorker()->getSupervisor()->restartWorkers(
+        IntellivoidBot::$BackgroundWorker->getSupervisor()->setDisplayOutput(TELEGRAM_BOT_NAME, true);
+        IntellivoidBot::getBackgroundWorker()->getClient()->addServer($BackgroundWorkerConfiguration["Host"], (int)$BackgroundWorkerConfiguration["Port"]);
+        IntellivoidBot::getBackgroundWorker()->getSupervisor()->startWorkers(
             $current_directory . DIRECTORY_SEPARATOR . 'worker', TELEGRAM_BOT_NAME,
             (int)$BackgroundWorkerConfiguration['MaxWorkers']
         );
@@ -107,28 +105,9 @@
         exit(255);
     }
 
-    $NextRestart = (int)time() + 1500;
-
     // Start listening to updates
     while(true)
     {
-        try
-        {
-            if((int)time() >= $NextRestart)
-            {
-                $NextRestart = (int)time() + 1500;
-
-                IntellivoidBot::getBackgroundWorker()->getSupervisor()->restartWorkers(
-                    $current_directory . DIRECTORY_SEPARATOR . 'worker', TELEGRAM_BOT_NAME,
-                    (int)$BackgroundWorkerConfiguration['MaxWorkers']
-                );
-            }
-        }
-        catch(Exception $e)
-        {
-            unset($e);
-        }
-
         try
         {
             //SpamProtectionBot::getLogHandler()->log(EventType::INFO, "Listen for updates", "Main");

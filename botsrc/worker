@@ -29,6 +29,7 @@
 
     $current_directory = getcwd();
     VerboseAdventure::setStdout(true); // Enable stdout
+    VerboseAdventure::setSimpleStdout(true); // Simplified output
     ErrorHandler::registerHandlers(); // Register error handlers
 
     if(class_exists("IntellivoidBot") == false)

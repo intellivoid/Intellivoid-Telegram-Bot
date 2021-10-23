@@ -86,6 +86,14 @@ use VerboseAdventure\VerboseAdventure;
             $DatabaseSchema->setDefinition('Database', 'telegram');
             $acm->defineSchema('Database', $DatabaseSchema);
 
+            $RedisSchema = new Schema();
+            $RedisSchema->setDefinition('Host', '127.0.0.1');
+            $RedisSchema->setDefinition('Port', '6379');
+            $RedisSchema->setDefinition('Username', '');
+            $RedisSchema->setDefinition('Password', '');
+            $RedisSchema->setDefinition('Database', '0');
+            $acm->defineSchema('Redis', $RedisSchema);
+
             return $acm;
         }
 
@@ -109,6 +117,17 @@ use VerboseAdventure\VerboseAdventure;
         public static function getDatabaseConfiguration()
         {
             return self::autoConfig()->getConfiguration('Database');
+        }
+
+        /**
+         * Returns the redis configuration
+         *
+         * @return mixed
+         * @throws Exception
+         */
+        public static function getRedisConfiguration()
+        {
+            return self::autoConfig()->getConfiguration('Redis');
         }
 
         /**

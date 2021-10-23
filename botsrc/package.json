@@ -69,6 +69,10 @@
         },
         {
             "required": true,
+            "file": "commands/CallbackqueryCommand.php"
+        },
+        {
+            "required": true,
             "file": "commands/StartCommand.php"
         },
         {
@@ -78,15 +82,11 @@
         {
             "required": true,
             "file": "commands/WhoisCommand.php"
-        },
-        {
-            "required": true,
-            "file": "commands/CallbackqueryCommand.php"
         }
     ],
     "files": [
+        "main",
         "package.json",
-        "worker",
-        "main"
+        "worker"
     ]
 }

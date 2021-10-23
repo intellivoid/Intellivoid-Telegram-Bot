@@ -5,13 +5,12 @@
     use BackgroundWorker\BackgroundWorker;
     use CoffeeHouse\CoffeeHouse;
     use DeepAnalytics\DeepAnalytics;
-use IntellivoidAccounts\IntellivoidAccounts;
-use SpamProtection\SpamProtection;
+    use IntellivoidAccounts\IntellivoidAccounts;
     use TelegramClientManager\TelegramClientManager;
-use VerboseAdventure\Abstracts\EventType;
-use VerboseAdventure\VerboseAdventure;
+    use VerboseAdventure\Abstracts\EventType;
+    use VerboseAdventure\VerboseAdventure;
 
-/**
+    /**
      * Class SpamProtectionBot
      */
     class IntellivoidBot

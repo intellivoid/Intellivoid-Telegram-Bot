@@ -60,7 +60,7 @@
     $BackgroundWorkerConfiguration = IntellivoidBot::getBackgroundWorkerConfiguration();
 
     /** @noinspection PhpUnhandledExceptionInspection */
-    $RedisConfiguration = SpamProtectionBot::getRedisConfiguration();
+    $RedisConfiguration = IntellivoidBot::getRedisConfiguration();
 
     // Define and create the Telegram Bot instance (SQL)
 
@@ -99,7 +99,7 @@
             exit(1);
         }
 
-        TelegramLog::initialize();
+        \Longman\TelegramBot\TelegramLog::initialize();
     }
     catch (Longman\TelegramBot\Exception\TelegramException $e)
     {

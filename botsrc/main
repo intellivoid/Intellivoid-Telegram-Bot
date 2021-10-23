@@ -108,6 +108,7 @@
     // Start listening to updates
     while(true)
     {
+        IntellivoidBot::$BackgroundWorker->getSupervisor()->monitor(TELEGRAM_BOT_NAME);
         try
         {
             //SpamProtectionBot::getLogHandler()->log(EventType::INFO, "Listen for updates", "Main");
@@ -119,13 +120,11 @@
                 if($update_count > 0)
                 {
                     IntellivoidBot::getLogHandler()->log(EventType::INFO, "Processed $update_count update(s)", "Main");
-
                 }
             }
             else
             {
                 IntellivoidBot::getLogHandler()->log(EventType::ERROR, "Failed to fetch updates: " . $server_response->printError(true), "Main");
-
             }
         }
         catch (TelegramException $e)

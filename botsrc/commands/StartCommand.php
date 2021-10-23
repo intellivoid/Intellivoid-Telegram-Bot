@@ -65,14 +65,14 @@
         /**
          * Command execute method
          *
-         * @return ServerResponse|null
+         * @return ServerResponse
          * @throws AccountNotFoundException
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws TelegramException
          * @noinspection DuplicatedCode
          */
-        public function execute(): ?ServerResponse
+        public function execute(): ServerResponse
         {
             // Find all clients
             $this->WhoisCommand = new WhoisCommand($this->telegram, $this->update);
@@ -106,12 +106,12 @@
             // Ignore forwarded commands
             if($this->getMessage()->getForwardFrom() !== null || $this->getMessage()->getForwardFromChat())
             {
-                return null;
+                return Request::emptyResponse();
             }
 
             if($this->getMessage()->getChat()->getType() !== TelegramChatType::Private)
             {
-                return null;
+                return Request::emptyResponse();
             }
 
             if($this->WhoisCommand->UserClient->AccountID == null)
@@ -144,6 +144,5 @@
                 "chat_id" => $this->getMessage()->getChat()->getId(),
                 "text" => "Hi " . $Account->Username . ", you are currently linked to Intellivoid Accounts!"
             ]);
-
         }
     }

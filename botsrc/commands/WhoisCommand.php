@@ -743,9 +743,9 @@
          * @return ServerResponse
          * @noinspection DuplicatedCode
          */
-        public function execute(): ?ServerResponse
+        public function execute(): ServerResponse
         {
-           return null;
+           return Request::emptyResponse();
         }
 
         /**

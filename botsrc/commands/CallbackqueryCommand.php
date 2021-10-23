@@ -59,7 +59,7 @@
         /**
          * Command execute method
          *
-         * @return ServerResponse|null
+         * @return ServerResponse
          * @throws AccountNotFoundException
          * @throws DatabaseException
          * @throws InvalidSearchMethod
@@ -68,7 +68,7 @@
          * @throws TelegramException
          * @throws \TelegramClientManager\Exceptions\DatabaseException
          */
-        public function execute(): ?ServerResponse
+        public function execute(): ServerResponse
         {
             $IntellivoidAccounts = new IntellivoidAccounts();
 

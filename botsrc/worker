@@ -213,24 +213,18 @@
 
     while(true)
     {
-        while(
-            @$BackgroundWorker->getWorker()->getGearmanWorker()->work() ||
-            $BackgroundWorker->getWorker()->getGearmanWorker()->returnCode() == GEARMAN_TIMEOUT
-        )
+        try
         {
+            $BackgroundWorker->getWorker()->work(false);
 
-            if ($BackgroundWorker->getWorker()->getGearmanWorker()->returnCode() == GEARMAN_TIMEOUT)
+            if($BackgroundWorker->getWorker()->getGearmanWorker()->returnCode() == GEARMAN_TIMEOUT)
             {
-                IntellivoidBot::processSleepCycle(); // Go to sleep if there's no activity
-                continue;
-            }
-
-            if ($BackgroundWorker->getWorker()->getGearmanWorker()->returnCode() != GEARMAN_SUCCESS)
-            {
-                IntellivoidBot::getLogHandler()->log(EventType::WARNING, "Gearman returned error code " . $BackgroundWorker->getWorker()->getGearmanWorker()->returnCode(), "Worker");
-                break;
+                IntellivoidBot::processSleepCycle();
             }
         }
+        catch(Exception $e)
+        {
+            IntellivoidBot::getLogHandler()->logException($e, 'Worker');
+        }
     }
-
 

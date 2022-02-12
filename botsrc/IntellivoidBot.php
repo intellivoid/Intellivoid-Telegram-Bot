@@ -6,7 +6,8 @@
     use CoffeeHouse\CoffeeHouse;
     use DeepAnalytics\DeepAnalytics;
     use IntellivoidAccounts\IntellivoidAccounts;
-    use TelegramClientManager\TelegramClientManager;
+use Longman\TelegramBot\DB;
+use TelegramClientManager\TelegramClientManager;
     use VerboseAdventure\Abstracts\EventType;
     use VerboseAdventure\VerboseAdventure;
 
@@ -226,6 +227,7 @@
 
                     self::getTelegramClientManager()->disconnectDatabase();
                     self::getIntellivoidAccounts()->disconnectDatabase();
+                    DB::disconnect();
                     self::setIsSleeping(true);
                 }
             }
@@ -237,6 +239,7 @@
 
                     self::getTelegramClientManager()->connectDatabase();
                     self::getIntellivoidAccounts()->connectDatabase();
+                    DB::connect();
                     self::setIsSleeping(false);
                 }
             }
